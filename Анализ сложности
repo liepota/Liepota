@@ -1,0 +1,145 @@
+import random
+import time
+import matplotlib.pyplot as plt
+import pandas as pd
+
+def create_mass(N: int) ->int:
+    mass = [random.randint(1, 100) for i in range(N)]
+    return mass
+    
+N = [1,2,3,5,7,10,20,50,70,100,200,500]
+finding_lenght = []
+
+def find_len_mass(mass):
+    for i in range(len(N)):
+        lenght = create_mass(N[i])
+        finding_lenght.append(lenght)
+    return finding_lenght
+find_len_mass(N)
+
+time_of_work = []
+for i in N:
+    res = %timeit -o -r3 find_len_mass(i)
+    time_of_work.append(res.average)
+time_of_work
+
+time_of_work = sorted(time_of_work)
+time_of_work #сортируем измерения времени
+
+f, ax = plt.subplots()
+ax1 = ax.twinx()
+ax.plot(N, time_of_work) #эксперементальный
+ax1.plot(N,[i for i in N], color ='red') #теоретический
+ax.set_ylabel('Время выполнения алгоритма')
+ax.set_xlabel('Количество элементов в массиве')
+
+def bubble_sort(mass):
+    for i in range(len(mass)-1):
+        for j in range(len(mass)-i-1):
+            if mass[j] > mass[j+1]:
+                mass[j], mass[j+1] = mass[j+1], mass[j]
+                
+def sorting(num:int)->'array':
+    new_mass = create_mass(num)
+    bubble_sort(new_mass)
+
+time_of_sorting = []
+for i in N:
+    res = %timeit -o -r3 sorting(i)
+    time_of_sorting.append(res.average)
+time_of_sorting
+
+f, ax = plt.subplots()
+ax1 = ax.twinx()
+ax.plot(N, time_of_sorting) #эксперементальный
+ax1.plot(N,[i**2 for i in N], color ='red') #теоретический
+ax.set_ylabel('Время выполнения алгоритма')
+ax.set_xlabel('Количество элементов в массиве')
+
+last_elems =[]
+def find_last_el(mass):
+    for i in range(len(N)):
+        massivchik = create_mass(N[i])
+        last_elems.append(massivchik[-1])
+    return last_elems
+find_last_el(N)
+
+time_of_find_le = []
+for i in N:
+    res = %timeit -o -r3 find_last_el(i)
+    time_of_find_le.append(res.average)
+time_of_find_le
+time_of_find_le = sorted(time_of_find_le)
+time_of_find_le
+
+f, ax = plt.subplots()
+ax1 = ax.twinx()
+ax.plot(N, time_of_find_le) #эксперементальный
+ax1.plot(N,[i for i in N], color ='red') #теоретический
+ax.set_ylabel('Время выполнения алгоритма')
+ax.set_xlabel('Количество элементов в массиве')
+
+values_to_select = {"value1": [random.randint(1,100) for i in range(50)],
+                    "value2": [random.randint(1,100) for i in range(100)],
+                    "value3": [random.randint(1,100) for i in range(500)]}
+                    
+df = pd.DataFrame({
+     'Переменные': ['N=50', "N=50", "N=50", 'N=100', "N=100", "N=100", 'N=500', "N=500", "N=500"],
+     'Параметры': ['Лучший случай', "Средний", "Худший", 'Лучший случай', "Средний", "Худший", 
+                    'Лучший случай', "Средний", "Худший"],
+     'Готовая реализация': [0, 0, 0, 0, 0, 0, 0, 0, 0],
+     'Собственная реализация': [0, 0, 0, 0, 0, 0, 0, 0, 0]})
+
+def operation_time(function, value):
+    if case == "Лучший случай":
+        res = %timeit -o -r5 function(value)
+        return res.best
+    if case == "Средний":
+        res = %timeit -o -r5 function(value)
+        return res.average
+    if case == "Худший":
+        res = %timeit -o -r5 function(value)
+        return res.worst
+ 
+cases = ["Лучший случай", "Средний", "Худший"]
+i = 0
+for case in cases:
+    time = operation_time(bubble_sort, values_to_select['value1'])
+    df.loc[i,'Собственная реализация'] = time * 1000
+    i += 1
+    
+cases = ["Лучший случай", "Средний", "Худший"]
+i = 0
+for case in cases:
+    time = operation_time(sorted, values_to_select['value1'])
+    df.loc[i, 'Готовая реализация'] = time * 1000
+    i += 1
+    
+cases = ["Лучший случай", "Средний", "Худший"]
+i = 3
+for case in cases:
+    time = operation_time(bubble_sort, values_to_select['value2'])
+    df.loc[i,'Собственная реализация'] = time * 1000
+    i += 1
+
+cases = ["Лучший случай", "Средний", "Худший"]
+i = 3
+for case in cases:
+    time = operation_time(sorted, values_to_select['value2'])
+    df.loc[i, 'Готовая реализация'] = time * 1000
+    i += 1
+    
+cases = ["Лучший случай", "Средний", "Худший"]
+i = 6
+for case in cases:
+    time = operation_time(bubble_sort, values_to_select['value3'])
+    df.loc[i,'Собственная реализация'] = time * 1000
+    i += 1
+    
+cases = ["Лучший случай", "Средний", "Худший"]
+i = 6
+for case in cases:
+    time = operation_time(sorted, values_to_select['value3'])
+    df.loc[i, 'Готовая реализация'] = time * 1000
+    i += 1
+df
