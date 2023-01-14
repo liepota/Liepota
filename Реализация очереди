@@ -1,0 +1,76 @@
+from queue import *
+
+class Queue_cl:
+    def __init__(self):
+        self.queue = []
+        
+    def push(self, item):  ## 1
+        self.queue.append(item)
+
+    def pop(self):  ## 2
+        if self.isempty():
+            return None
+        rem = self.queue.pop(0)
+        return rem
+
+    def top(self):  ## 3
+        if self.isempty():
+            return None
+        return self.queue[0]
+
+    def isempty(self):  ## 4
+        if len(self.queue) == 0:
+            return True
+        else:
+            return None
+
+    def Print(self):  ## 5
+        print(self.queue)
+        
+def work_w_queue(file):
+    queue = Queue_cl()
+    f = open(file)
+    lst = f.read().split()
+    for el in lst:
+        if el[0]=='1':
+            queue.push(el[2:])
+            #queue.Print()
+        elif el[0]=='2':
+            queue.pop()
+            #queue.Print()
+        elif el[0]=='3':
+            queue.top()
+            #queue.Print()
+        elif el[0]=='4':
+            queue.isempty()
+            #queue.Print()
+        elif el[0]=='5':
+            queue.Print()
+    
+    f.close()
+test_q = work_w_queue('input.txt')
+
+def work_w_imp_queue(file):
+    qq = Queue()
+    f = open(file)
+    lst = f.read().split()
+    for el in lst:
+        if el[0]=='1':
+            qq.put(el[2:])
+            print(list(qq.queue))
+        elif el[0]=='2':
+            qq.get()
+            #print(list(qq.queue.get())
+        elif el[0]=='3':
+            print(list(qq.queue[0]))
+        elif el[0]=='4':
+            if qq.qsize()==0:
+                print('Empty')
+            else:
+                print('Not empty')
+        elif el[0]=='5':
+            print(list(qq.queue))
+    
+    f.close()
+    
+test_qq = work_w_imp_queue('input.txt')
