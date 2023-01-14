@@ -1,0 +1,35 @@
+def erat(num) :
+    global delit
+    prime = [True] * (num + 1)
+    delit = []
+    prime[0] = prime[1] = False
+    for i in range(2,num + 1,2):
+        prime[i] = False
+    prime[2] = True
+    for i in range(3, num + 1,2):
+        if not prime[i]:
+            continue
+        for j in range(i * i, num + 1, i):
+            prime[j] = False
+    for i,j in enumerate(prime) :
+        if j :
+            delit.append(i)
+            if i > n:
+                break
+ 
+ 
+n = int(input())
+erat(n*2)
+k = delit.pop()
+i = n
+it = k - n
+f = open('OUTPUT.TXT','w')
+while i > 1:
+    for jj in range(i, k//2, -1) :
+        f.write(f'{jj} {k-jj}\n')
+    i = it - 1
+    k = delit.pop()
+    while i < k//2 and delit :
+        k = delit.pop()
+    it = k - i
+f.close()
