@@ -1,0 +1,24 @@
+def mass_2d(m, n):
+    lst = []
+    for i in range(m):
+        temp = [input("Введите элемент матрицы: ") for j in range(n)]
+        lst.append(temp)
+    return lst
+m = int(input("Введите кол-во строк: "))
+n = int(input("Введите кол-во стобцов: "))
+
+def print_2d_mass(matrix):
+    for row in matrix:
+        for el in row:
+            print(el, end=' ')
+        print()
+        
+z = mass_2d(m, n)
+print("Ваша изначальная матрица: ")        
+print_2d_mass(z)
+print()
+print("Ваша транспонированная матрица: ")
+
+new_lst = [[z[j][i] for j in range(len(z))] for i in range(len(z[0]))]
+for k in new_lst:
+    print(*k)
