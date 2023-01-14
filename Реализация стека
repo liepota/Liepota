@@ -1,0 +1,85 @@
+import time
+
+class Stack:
+    def __init__(self):
+        self.stack = []
+        
+    def push(self, item):  ## 1
+        self.stack.append(item)
+
+    def pop(self):  ## 2
+        if self.isempty():
+            return None
+        rem = self.stack.pop()
+        return rem
+
+    def top(self):  ## 3
+        if self.isempty():
+            return None
+        return self.stack[-1]
+
+    def isempty(self):  ## 4
+        if len(self.stack) == 0:
+            return True
+        else:
+            return False
+
+    def Print(self):  ## 5
+        print(self.stack)
+        
+def work_w_stack(file):
+    stek = Stack()
+    f = open(file)
+    lst = f.read().split()
+    for el in lst:
+        if el[0]=='1':
+            stek.push(el[2:])
+            #stek.Print()
+        elif el[0]=='2':
+            stek.pop()
+            #stek.Print()
+        elif el[0]=='3':
+            stek.top()
+            #stek.Print()
+        elif el[0]=='4':
+            stek.isempty()
+            #stek.Print()
+        elif el[0]=='5':
+            stek.Print()
+    
+    f.close()
+    
+test = work_w_stack('input.txt')
+
+def Math(op_or, op1, op2):
+    if op_or == "+":
+           return op1 + op2
+    elif op_or == "-":
+        return op1 - op2
+    elif op_or == "*":
+        return op1 * op2
+    elif op_or == ":":
+        return op1 / op2
+    elif op_or == "^":
+           return op1 ** op2
+
+
+def postfix(file):
+    stek = Stack()
+    f = open(file)
+    lst = f.read().split()
+    #lst = cht.split()
+    for el in lst:
+        if el.isdigit():
+            stek.push(int(el))
+        else:
+            op2 = stek.pop()
+            op1 = stek.pop()
+            res = Math(el, op1, op2)
+            stek.push(res)
+    return stek.pop()
+    
+    f.close()
+    
+pf = postfix('input.txt')
+pf
