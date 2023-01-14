@@ -1,0 +1,146 @@
+from random import *
+import time
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def read(f):
+    f = open(f, encoding = 'utf-8')
+    res = f.read()
+    data = res.split()
+    f.close()
+    return data
+mass = read('words.txt')
+
+def bubble_sort(mass):
+    for i in range(len(mass)-1): #пузырек
+        for j in range(len(mass)-i-1):
+            if mass[j] > mass[j+1]:
+                mass[j], mass[j+1] = mass[j+1], mass[j]
+                
+    return mass
+bubble_sort(mass)
+
+dictionary = {}
+for i in mass:
+    if dictionary.get(i) == None:
+        dictionary[i] = 1
+    else:
+        dictionary[i] += 1
+        
+dictionary
+
+new_mass = read('words.txt')
+bubble_sort(new_mass)
+
+def merge_sort(alist):
+    if len(alist) > 1:
+        mid = len(alist) // 2
+        lefthalf = alist[:mid]
+        righthalf = alist[mid:]
+
+        merge_sort(lefthalf)
+        merge_sort(righthalf)
+        i = 0
+        j = 0
+        k = 0
+        
+        while i < len(lefthalf) and j < len(righthalf):
+            if lefthalf[i] < righthalf[j]:
+                alist[k] = lefthalf[i]
+                i = i + 1
+            else:
+                alist[k] = righthalf[j]
+                j = j + 1
+            k = k + 1
+
+        while i < len(lefthalf):
+            alist[k] = lefthalf[i]
+            i = i + 1
+            k = k + 1
+
+        while j < len(righthalf):
+            alist[k] = righthalf[j]
+            j = j + 1
+            k = k + 1
+            
+    return alist
+    
+new_mass2 = read('words.txt')
+merge_sort(new_mass2)
+
+def word(): #функция, которая генерирует текст
+    word_len = randint(1, 11)
+    my_word = ''
+    for i in range(1, word_len + 1):
+        a = randint(97, 122)
+        w_letter = chr(a)
+        my_word += w_letter
+    return my_word
+
+def sentence(m):
+    s_words = [word() for j in range(m)]
+    sentence = " ".join(s_words)
+    sentence = list(sentence.split())
+    return sentence
+
+sentence(10)
+
+def bubble_time(m): 
+    mass = sentence(m)
+    time_start = time.perf_counter()
+    bubble_sort(mass)
+    time_end = time.perf_counter() - time_start
+    return time_end
+    
+m1 = 100
+sorting_b1 = bubble_time(m1)
+sorting_b1
+m2 = 1000
+sorting_b2 = bubble_time(m2)
+sorting_b2
+m3 = 5000
+sorting_b3 = bubble_time(m3)
+sorting_b3
+
+def merge_time(m):
+    mass = sentence(m)
+    time_start = time.perf_counter()
+    merge_sort(mass)
+    time_end = time.perf_counter() - time_start
+    return time_end
+    
+m4 = 100
+sorting_m1 = merge_time(m4)
+sorting_m1
+m5 = 1000
+sorting_m2 = merge_time(m5)
+sorting_m2
+m6 = 5000
+sorting_m3 = merge_time(m6)
+sorting_m3
+
+df = pd.DataFrame(columns = ['Количество слов', 'Bubble_sort', 'Merge_sort', ])
+a = [100, 500, 1000, 2000, 5000]
+for i in range(len(a)):
+    df.loc[i,'Количество слов'] = a[i]
+    
+df.loc[0,'Bubble_sort'] = sorting_b1
+df.loc[1,'Bubble_sort'] = sorting_b2
+df.loc[2,'Bubble_sort'] = sorting_b3
+df.loc[3,'Bubble_sort'] = sorting_b4
+df.loc[4,'Bubble_sort'] = sorting_b5
+
+df.loc[0,'Merge_sort'] = sorting_m1
+df.loc[1,'Merge_sort'] = sorting_m2
+df.loc[2,'Merge_sort'] = sorting_m3
+df.loc[3,'Merge_sort'] = sorting_m4
+df.loc[4,'Merge_sort'] = sorting_m5
+df
+
+x = [100, 500, 1000, 2000, 5000]
+y = [sorting_b1, sorting_b2, sorting_b3, sorting_b4, sorting_b5]
+b = [sorting_m1, sorting_m2, sorting_m3, sorting_m4, sorting_m5]
+fig, (ax1, ax2) = plt.subplots(1, 2)
+ax1.plot(x, y)
+ax2.plot(x, b, color = 'red')
+fig.set_size_inches(15, 5)
